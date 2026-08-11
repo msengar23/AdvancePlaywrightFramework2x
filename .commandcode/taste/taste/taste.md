@@ -1,0 +1,9 @@
+# Taste
+- Prefers a layered `src/` directory structure for Playwright test automation frameworks, separating concerns into `api`, `config`, `fixtures`, `pages`, `testdata`, `tests`, and `utils` folders, plus top-level `docs/` and `rules/` folders. Confidence: 0.8
+- Communicates desired project/file structure by sharing a screenshot of the target folder tree, expecting it to be transcribed and replicated exactly rather than paraphrased. Confidence: 0.7
+- Uses `.env` files for environment configuration alongside a `tsconfig.json` for TypeScript setup in test frameworks, but prefers to skip creating placeholder/empty `.env` files and instead proceed to the next step (env files should only be created when explicitly requested or with real content). Confidence: 0.4
+- When scaffolding a project, prefers not to have empty placeholder files auto-generated (e.g., a skeleton `.env` with just comments); skips them and moves on to the next actionable step. Confidence: 0.6
+- Standardizes the Playwright test framework toolchain on a specific set of libraries: `dotenv` (env config), `csv-parse` and `xlsx` (test data from files), `winston` (logging), `@faker-js/faker` (test data generation), `jsonpath-plus` (JSON assertions), `ajv` + `ajv-formats` (schema validation), and `allure-playwright` (reporting). Confidence: 0.7
+- Installs test framework dependencies as `devDependencies` (via `npm install -D ...`). Confidence: 0.6
+- The user's environment sets `NODE_ENV=production`, so npm installs must be run with `--include=dev` (otherwise npm omits all devDependencies and reports "up to date"/"removed 61 packages" while installing nothing). Confidence: 0.8
+- Wants a `.gitkeep` file created in every project folder (including nested ones, excluding `node_modules`) so the full directory structure stays tracked in version control. Confidence: 0.9
