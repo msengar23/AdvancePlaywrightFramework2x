@@ -1,37 +1,35 @@
 # Advance Playwright Framework 2x
 
-A structured, scalable end-to-end test automation framework built on [Playwright](https://playwright.dev/).
+A structured, scalable end-to-end test automation framework built on [Playwright](https://playwright.dev/) for the TTACart demo application.
 
 ## Features
 
-- **Page Object Model** – organized page classes under `src/pages`
-- **Fixtures** – reusable test fixtures under `src/fixtures`
-- **API testing** – API helpers under `src/api`
-- **Config management** – centralized configuration under `src/config`
-- **Test data** – data files and generators under `src/testdata`
-- **Utilities** – shared helpers under `src/utils`
-- **Allure reporting** – integrated via `allure-playwright`
+- **Page Object Model** – page classes under `src/pages` (BasePage, LoginPage, InventoryPage, CartPage, checkout pages, ItemDetailPage)
+- **Utilities** – shared helpers under `src/utils` (`UtilElementLocator`, `DataGenerator`, `logger`, `CustomReporter`)
+- **Custom TTA HTML reporter** – real-time HTML report with screenshots, videos, traces, step-level logs and history
+- **AI-powered analysis** – RCA (root cause analysis) and flaky test detection under `ai/agents`, driven by a configurable LLM provider under `ai/config`
+- **Winston logging** – console + file (`logs/combined.log`) via `src/utils/logger.ts`
+- **Environment-driven config** – `dotenv`-loaded `.env` with per-environment base URLs (qa / stg / prod / api) resolved in `playwright.config.ts`
 - **CSV & Excel support** – test data driven via `csv-parse` and `xlsx`
 - **Faker data generation** – via `@faker-js/faker`
 - **JSON schema validation** – via `ajv` / `ajv-formats`
-- **Logging** – via `winston`
-- **CI/CD ready** – GitHub Actions workflow included
+- **CI/CD ready** – Jenkins `Jenkinsfile` and GitHub Actions workflow included
 
 ## Project Structure
 
 ```
-├── .github/workflows/   # CI/CD pipelines
+├── .github/workflows/   # GitHub Actions CI
+├── ai/
+│   ├── agents/          # RCA + flaky test AI analysis agents
+│   └── config/          # LLM provider configuration
 ├── docs/                # Documentation
 ├── rules/               # Rules and guidelines
 ├── src/
-│   ├── api/             # API helpers and request wrappers
-│   ├── config/          # Configuration files
-│   ├── fixtures/        # Test fixtures
 │   ├── pages/           # Page Object Model classes
-│   ├── testdata/        # Test data files and generators
 │   ├── tests/           # Test specs
-│   └── utils/           # Utility functions
-├── .env                 # Environment variables (not committed)
+│   └── utils/           # Utility functions, logger, custom reporter
+├── .env                 # Environment variables (NOT committed)
+├── Jenkinsfile          # Jenkins declarative pipeline (Windows agent)
 ├── playwright.config.ts # Playwright configuration
 ├── package.json
 └── tsconfig.json
@@ -53,39 +51,63 @@ A structured, scalable end-to-end test automation framework built on [Playwright
 2. Install Playwright browsers:
 
    ```bash
-   npx playwright install
+   npx playwright install chromium
    ```
 
-3. Run all tests:
+3. Create your `.env` from `.env.example` (or the local `.env` kept out of git):
+
+   ```
+   TTA_ENV=qa
+   BASE_URL=[https://app.thetestingacademy.com](https://app.thetestingacademy.com/)
+   LOG_LEVEL=info
+   TEST_ENV=QA
+   ```
+
+4. Run a single test file:
+
+   ```bash
+   npx playwright test src/tests/login.spec.ts
+   ```
+
+5. Run the full suite:
 
    ```bash
    npx playwright test
    ```
 
-4. Run tests with a specific browser / project:
+6. Open the generated TTA report:
 
    ```bash
-   npx playwright test --project=chromium
-   ```
-
-5. Open the HTML test report:
-
-   ```bash
-   npx playwright show-report
+   start tta-report\index.html
    ```
 
 ## Environment Variables
 
-Copy your environment settings into a local `.env` file. The project uses `dotenv` to load them.
+Copy your environment settings into a local `.env` file — it is loaded via `dotenv` and ignored by git. The base URL is resolved in `playwright.config.ts`:
+
+| Variable | Purpose |
+| --- | --- |
+| `TTA_ENV` | `qa` \| `stg` \| `prod` \| `api` — selects the environment base URL |
+| `BASE_URL` | Overrides the environment base URL |
+| `LOG_LEVEL` | Winston log level (default `info`) |
+| `TEST_ENV` | Label shown in the TTA report |
+| `TEST_AUTHOR` | Author name shown in the TTA report |
 
 ## CI/CD
 
-A GitHub Actions workflow (`.github/workflows/playwright.yml`) automatically runs the test suite on every push to `main`/`master` and on pull requests.
+### Jenkins
+
+A declarative `Jenkinsfile` is included — create a **Pipeline** job pointing at this repo and it will `npm ci`, install Chromium, and run the tests headless, archiving `tta-report/**` and `logs/**`.
+
+### GitHub Actions
+
+A workflow (`.github/workflows/playwright.yml`) runs the suite on push to `main`/`master` and on pull requests.
 
 ## Reporting
 
-- HTML reports are generated by default (`reporter: 'html'`).
-- Allure integration is available via the `allure-playwright` reporter.
+- **TTA HTML report** – generated by the custom reporter (`src/utils/CustomReporter.ts`) under `tta-report/` with per-step screenshots, videos, traces, console logs, and a build history page.
+- **AI verdicts** – failed tests are analyzed by the RCA agent when an LLM API key is configured (`ai/config/providers.ts`).
+- **Flaky analysis** – build-vs-build comparison surfaced in the report's Flaky tab.
 
 ## License
 
