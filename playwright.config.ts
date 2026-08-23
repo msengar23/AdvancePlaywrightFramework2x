@@ -81,8 +81,25 @@
 
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
+import os from 'os';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
+
+// When Playwright runs under a Windows service account such as Jenkins
+// (NT AUTHORITY\SYSTEM), USERPROFILE resolves to C:\WINDOWS\system32\config\systemprofile,
+// so it cannot find browsers installed under the normal user profile. Point it at the
+// machine's ms-playwright location that any account can access, if present.
+if (process.platform === 'win32' && !process.env.PLAYWRIGHT_BROWSERS_PATH) {
+  const candidates = [
+    path.join(process.env.ProgramData || 'C:\\ProgramData', 'ms-playwright'),
+    path.join('C:\\Users', 'mamta', 'AppData', 'Local', 'ms-playwright'),
+    path.join(os.homedir(), 'AppData', 'Local', 'ms-playwright'),
+  ];
+  const found = candidates.find((dir) => fs.existsSync(dir));
+  if (found) process.env.PLAYWRIGHT_BROWSERS_PATH = found;
+}
 
 function normalizeUrl(raw: string | undefined): string | undefined {
   if (!raw) return undefined;

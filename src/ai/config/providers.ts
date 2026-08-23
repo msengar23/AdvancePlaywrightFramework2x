@@ -8,4 +8,4 @@ export function hasApiKey(): boolean {
     // Stub — no provider configured yet.
     // The reporter checks this before calling RCA / Flaky LLM paths.
     return false;
-}1
+}

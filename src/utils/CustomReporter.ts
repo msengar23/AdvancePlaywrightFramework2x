@@ -17,9 +17,9 @@ import {
 } from '@playwright/test/reporter';
 import * as fs from 'fs';
 import * as path from 'path';
-import { analyzeFailure, type RcaVerdict } from '../../ai/agents/rcaAgent';
-import { analyzeFlaky, type BuildSummary, type FlakyResult } from '../../ai/agents/flakyAnalyzer';
-import { hasApiKey } from '../../ai/config/providers';
+import { analyzeFailure, type RcaVerdict } from '../ai/agents/rcaAgent';
+import { analyzeFlaky, type BuildSummary, type FlakyResult } from '../ai/agents/flakyAnalyzer';
+import { hasApiKey } from '../ai/config/providers';
 
 export interface StepData {
     title: string;
