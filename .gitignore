@@ -14,9 +14,6 @@ node_modules/
 .env.*
 !.env.example
 
-# Agent tooling (local)
-.commandcode/
-
 # Runtime artifacts
 /logs/
 /reports/
