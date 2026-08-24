@@ -153,7 +153,7 @@ export default defineConfig({
   use: {
     baseURL: resolveBaseURL(),
     trace: 'on',
-    headless: false,
+    headless: true,
     screenshot: 'on',
     video: 'on',
     viewport: { width: 1920, height: 1080 }
