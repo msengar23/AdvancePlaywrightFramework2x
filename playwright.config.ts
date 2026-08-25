@@ -148,14 +148,15 @@ export default defineConfig({
 
   reporter: [
     ['./src/utils/CustomReporter.ts'],
+    ['html'],
+    ['list'],
   ],
 
   use: {
     baseURL: resolveBaseURL(),
-    trace: 'on',
-    headless: true,
-    screenshot: 'on',
+    screenshot: 'only-on-failure',
     video: 'on',
+    trace: 'on',
     viewport: { width: 1920, height: 1080 }
   },
 
