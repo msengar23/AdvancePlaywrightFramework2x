@@ -10,10 +10,11 @@ A structured, scalable end-to-end test automation framework built on [Playwright
 - **AI-powered analysis** – RCA (root cause analysis) and flaky test detection under `src/ai/agents`, driven by a configurable LLM provider under `src/ai/config`
 - **Path aliases** – clean imports via `@pages/*`, `@utils/*`, `@api/*`, `@config/*`, `@fixtures/*`, `@testdata/*` (mapped in `tsconfig.json`)
 - **Winston logging** – console + file (`logs/combined.log`) via `src/utils/logger.ts`
-- **Environment-driven config** – `dotenv`-loaded `.env` with per-environment base URLs (qa / stg / prod / api) resolved in `playwright.config.ts`
+- **Environment-driven config** – `dotenv`-loaded `.env` with per-environment base URLs (qa / stg / prod / dev / api) resolved in `playwright.config.ts`
 - **CSV & Excel support** – test data driven via `csv-parse` and `xlsx`
 - **Faker data generation** – via `@faker-js/faker`
-- **JSON schema validation** – via `ajv` / `ajv-formats`
+- **JSON schema & path queries** – validation via `ajv` / `ajv-formats`, queries via `jsonpath-plus`
+- **Allure reporting** – optional Allure integration via `allure-playwright`
 - **CI/CD ready** – Jenkins `Jenkinsfile` and GitHub Actions workflow included
 
 ## Project Structure
@@ -63,7 +64,7 @@ A structured, scalable end-to-end test automation framework built on [Playwright
 
    ```
    TTA_ENV=qa
-   BASE_URL=[https://app.thetestingacademy.com](https://app.thetestingacademy.com/)
+   BASE_URL=https://app.thetestingacademy.com
    LOG_LEVEL=info
    TEST_ENV=QA
    ```
@@ -92,7 +93,7 @@ Copy your environment settings into a local `.env` file — it is loaded via `do
 
 | Variable | Purpose |
 | --- | --- |
-| `TTA_ENV` | `qa` \| `stg` \| `prod` \| `api` — selects the environment base URL |
+| `TTA_ENV` | `qa` \| `stg` \| `prod` \| `dev` \| `api` — selects the environment base URL |
 | `BASE_URL` | Overrides the environment base URL |
 | `LOG_LEVEL` | Winston log level (default `info`) |
 | `TEST_ENV` | Label shown in the TTA report |
