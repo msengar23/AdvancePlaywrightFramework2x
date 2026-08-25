@@ -1,23 +1,17 @@
-
-# Dependencies
-node_modules/
-
 # Playwright
+node_modules/
+.env
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
 
-# Environment — never commit secrets
-.env
-.env.*
-!.env.example
+# Framework artifacts
+/logs/
+/reports/
+/tta-report/
 
 # Agent tooling (local)
 .commandcode/
 
-# Runtime artifacts
-/logs/
-/reports/
-/tta-report/
